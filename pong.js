@@ -1,75 +1,89 @@
-// Anna Wasson
-// Lab 4: Pong
-// 2-10-19
+p1x=0;
+p2x=0;
+vel=5;
 
-// Random Ball Placement
-var xBall = Math.floor(Math.random() * 300) + 50;
-var yBall = 50;
-var xSpeed = (2, 7);
-var ySpeed = (-7, -2);
-var score = 0
+score1=0;
+score2=0;
 
-// Canvas
+px_b=75;
+py_b=32;
+
+var bx_speed = -4;
+var by_speed = -4;
+
+
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(1000, 1000);
+   bg = loadImage('https://raw.githubusercontent.com/talesjoabe/pongGame/master/background.png');
 }
-
-//Background
 
 function draw() {
+  background(bg);
+  Score();
 
-  // Background
-  background(0);
+  fill(51, 102, 204);
+  rect(p1x,0,150,20);
 
-  // Paddle
-  fill('#ffffff');
-  rect(mouseX, 375, 90, 15);
+  fill(255, 0, 0);
+  rect(p2x,980,150,20);
 
-  //Functions
-  move();
-  display();
+  fill(255,255,255);
+  ellipse(px_b,py_b,25,25);
+
+  moveBall();
+  movePlayers();
   bounce();
-  //resetBall();
-  //paddle();
 
-  //Score
-  fill('#d9c3f7');
-  textSize(24);
-  text("Score: " + score, 10, 25);
 }
-// Ball Functions
-function move() {
-  xBall += xSpeed;
-  yBall += ySpeed;
+
+function movePlayers(){
+  if(p1x>=0 && p1x<=850){
+    if(keyIsDown(RIGHT_ARROW)) p1x=p1x+vel;
+    else if(keyIsDown(LEFT_ARROW)) p1x=p1x-vel;
+  }
+  else if(p1x<=0) p1x=850;
+  else p1x=0;
+
+  if(p2x>=0 && p2x<=850){
+    if(keyIsDown(68)&& p1x>=0 && p1x<=850) p2x=p2x+vel;
+    else if(keyIsDown(65)&& p1x>=0 && p1x<=850) p2x=p2x-vel;
+  }
+  else if(p2x<=0) p2x=850;
+  else p2x=0;
+}
+
+function Score(){
+  fill(255);
+  textSize(24);
+  text(" Jogador 1: " + score1, 850, 20);
+  text("Jogador 2: " + score2, 850, 980);
+}
+
+function moveBall() {
+  px_b += bx_speed;
+  py_b += by_speed;
 }
 
 
 function bounce() {
-
-  if (xBall < 10 ||
-    xBall > 400 - 10) {
-    xSpeed *= -1;
+  if (px_b < 10 ||
+    px_b > 1000 - 25) {
+    bx_speed *= -1;
   }
-  if (yBall < 10 ||
-    yBall > 400 - 10) {
-    ySpeed *= -1;
+  if(px_b>=p1x && px_b<= p1x+150 && py_b<=25 ){
+      bx_speed*=-1;
+      by_speed*=-1;
+  }else if(py_b<=0){
+    py_b=p2x+75;
+    px_b=980;
+    score2++;
   }
-}
-
-
-function display() {
-  fill('#d9c3f7');
-  ellipse(xBall, yBall, 20, 20);
-}
-
-// Bounce off Paddle
-function paddle() {
-  if ((xBall > mouseX &&
-      xBall < mouseX + 90) &&
-    (yBall + 10 >= 375)) {
-    xSpeed *= -1;
-    ySpeed *= -1;
-    score++;
-
+  if(px_b>=p2x && px_b<= p2x+150 && py_b>=985){
+      bx_speed*=-1;
+      by_speed*=-1;
+  } else if(py_b>=1000){
+    px_b=p1x+75;
+    py_b=32;
+    score1++;
   }
 }
