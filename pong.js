@@ -74,8 +74,8 @@ function bounce() {
       bx_speed*=-1;
       by_speed*=-1;
   }else if(py_b<=0){
-    py_b=p2x+75;
-    px_b=980;
+    px_b=p2x+75;
+    py_b=980;
     score2++;
   }
   if(px_b>=p2x && px_b<= p2x+150 && py_b>=985){
