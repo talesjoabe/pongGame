@@ -19,6 +19,10 @@ function setup() {
 
 function draw() {
   background(bg);
+
+  fill(255);
+  rect(-1,800, 1250, 900);
+
   Score();
 
   fill(51, 102, 204);
@@ -37,14 +41,14 @@ function draw() {
 }
 
 function movePlayers(){
-  if(p1y>=0 && p1y<=800){
+  if(p1y>=0 && p1y<=800-150){
     if(keyIsDown(UP_ARROW)) p1y=p1y-vel;
     else if(keyIsDown(DOWN_ARROW)) p1y=p1y+vel;
   }
   else if(p1y<0) p1y=650;
   else p1y=50;
 
-  if(p2y>=0 && p2y<=800){
+  if(p2y>=0 && p2y<=800-150){
     if(keyIsDown(87)) p2y=p2y-vel;
     else if(keyIsDown(83)) p2y=p2y+vel;
   }
@@ -53,9 +57,11 @@ function movePlayers(){
 }
 
 function Score(){
-  fill(255);
+
   textSize(24);
+  fill(51, 102, 204);
   text(" Jogador 1: " + score1, 20,825 );
+  fill(255, 0, 0);
   text("Jogador 2: " + score2, 1000, 825);
 }
 
@@ -73,7 +79,9 @@ function bounce() {
 
   if(py_b>=p1y && py_b<= p1y+150 && px_b<=25 ){
       bx_speed*=-1;
-      by_speed*=-1;
+      if(Math.random>0.5){
+        by_speed*=-1;
+      }
   }else if(px_b<=0){
     px_b=50;
     py_b=p1y+75;
@@ -82,7 +90,9 @@ function bounce() {
 
   if(py_b>=p2y && py_b<= p2y+150 && px_b>=1185){
       bx_speed*=-1;
-      by_speed*=-1;
+       if(Math.random>0.5){
+        by_speed*=-1;
+      }
   } else if(px_b>=1200){
     px_b=1150;
     py_b=p2y+75;
