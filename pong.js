@@ -1,5 +1,5 @@
-p1x=0;
-p2x=0;
+p1y=0;
+p2y=0;
 vel=5;
 
 score1=0;
@@ -13,8 +13,8 @@ var by_speed = -4;
 
 
 function setup() {
-  createCanvas(1000, 1000);
-   bg = loadImage('https://raw.githubusercontent.com/talesjoabe/pongGame/master/background.png');
+  createCanvas(1200, 850);
+   bg = loadImage('https://raw.githubusercontent.com/talesjoabe/pongGame/master/background2.png');
 }
 
 function draw() {
@@ -22,10 +22,10 @@ function draw() {
   Score();
 
   fill(51, 102, 204);
-  rect(p1x,0,150,20);
+  rect(0,p1y,20,150);
 
   fill(255, 0, 0);
-  rect(p2x,980,150,20);
+  rect(1180,p2y,20,150);
 
   fill(255,255,255);
   ellipse(px_b,py_b,25,25);
@@ -37,26 +37,26 @@ function draw() {
 }
 
 function movePlayers(){
-  if(p1x>=0 && p1x<=850){
-    if(keyIsDown(RIGHT_ARROW)) p1x=p1x+vel;
-    else if(keyIsDown(LEFT_ARROW)) p1x=p1x-vel;
+  if(p1y>=0 && p1y<=800){
+    if(keyIsDown(UP_ARROW)) p1y=p1y-vel;
+    else if(keyIsDown(DOWN_ARROW)) p1y=p1y+vel;
   }
-  else if(p1x<=0) p1x=850;
-  else p1x=0;
+  else if(p1y<0) p1y=650;
+  else p1y=50;
 
-  if(p2x>=0 && p2x<=850){
-    if(keyIsDown(68)&& p1x>=0 && p1x<=850) p2x=p2x+vel;
-    else if(keyIsDown(65)&& p1x>=0 && p1x<=850) p2x=p2x-vel;
+  if(p2y>=0 && p2y<=800){
+    if(keyIsDown(87)) p2y=p2y-vel;
+    else if(keyIsDown(83)) p2y=p2y+vel;
   }
-  else if(p2x<=0) p2x=850;
-  else p2x=0;
+  else if(p2y<0) p2y=650;
+  else p2y=50;
 }
 
 function Score(){
   fill(255);
   textSize(24);
-  text(" Jogador 1: " + score1, 850, 20);
-  text("Jogador 2: " + score2, 850, 980);
+  text(" Jogador 1: " + score1, 20,825 );
+  text("Jogador 2: " + score2, 1000, 825);
 }
 
 function moveBall() {
@@ -66,24 +66,26 @@ function moveBall() {
 
 
 function bounce() {
-  if (px_b < 10 ||
-    px_b > 1000 - 25) {
-    bx_speed *= -1;
+  if (py_b < 10 ||
+    py_b > 800-25) {
+    by_speed *= -1;
   }
-  if(px_b>=p1x && px_b<= p1x+150 && py_b<=25 ){
+
+  if(py_b>=p1y && py_b<= p1y+150 && px_b<=25 ){
       bx_speed*=-1;
       by_speed*=-1;
-  }else if(py_b<=0){
-    px_b=p2x+75;
-    py_b=980;
+  }else if(px_b<=0){
+    px_b=50;
+    py_b=p1y+75;
     score2++;
   }
-  if(px_b>=p2x && px_b<= p2x+150 && py_b>=985){
+
+  if(py_b>=p2y && py_b<= p2y+150 && px_b>=1185){
       bx_speed*=-1;
       by_speed*=-1;
-  } else if(py_b>=1000){
-    px_b=p1x+75;
-    py_b=32;
+  } else if(px_b>=1200){
+    px_b=1150;
+    py_b=p2y+75;
     score1++;
   }
 }
