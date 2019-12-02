@@ -1,6 +1,8 @@
+var socket;
+
 p1y = 0;
 p2y = 0;
-vel = 5;
+vel = 1;
 
 score1 = 0;
 score2 = 0;
@@ -8,14 +10,40 @@ score2 = 0;
 px_b = 75;
 py_b = 32;
 
-var bx_speed = -4;
-var by_speed = -4;
+var bx_speed = -5;
+var by_speed = -5;
 
 function setup() {
   createCanvas(1200, 850);
   bg = loadImage(
     'https://raw.githubusercontent.com/talesjoabe/pongGame/master/background2.png'
   );
+
+  // socket de comunicação com o server
+  socket = io.connect('http://localhost:3000');
+  socket.on('recv', newDrawing);
+}
+
+function newDrawing(data) {
+  noStroke();
+  // console.log(data);
+
+  if (data == 'as') {
+    // amarelo - sobe
+    p1y = p1y - vel;
+  } else if (data == 'ad') {
+    // amarelo - desce
+    p1y = p1y + vel;
+  } else if (data == 'vs') {
+    // vermelho - sobe
+    p2y = p2y - vel;
+  } else if (data == 'vd') {
+    // vermelho - desce
+    p2y = p2y + vel;
+  } else {
+    // bx_speed = data / 5;
+    // by_speed = data / 5;
+  }
 }
 
 function draw() {

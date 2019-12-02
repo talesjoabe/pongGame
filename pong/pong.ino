@@ -5,10 +5,6 @@ PB2 - Amarelo - Sobe                  Pino 10 (PWM)
 PB3 - Amarelo - Desce                 Pino 11 (PWM)
 PB4 - Vermelho - Sobe                 Pino 12
 PB5 - Vermelho - Desce                Pino 13
-PD4 -                                 Pino 4
-PD5 -                                 Pino 5 (PWM)
-PD6 -                                 Pino 6 (PWM)
-PD7 -                                 Pino 7
 */
 
 #include <avr/io.h>
@@ -37,10 +33,7 @@ int main()
   uint8_t ad_value;
 
   DDRB &= 0b11000011; // entrada (PB5, PB4, PB3 e PB2)
-//  DDRD |= 0b11110000; // saída (PD4,PD5,PD6,PD7)
-
   PORTB |= 0b00111100; // pull up (PB5, PB4, PB3 e PB2)
-//  PORTD &= 0b00001111; // Saída em nível baixo (PD4 até PD7)
 
   while (true) {
     set_ADC();
@@ -49,20 +42,31 @@ int main()
     ad_value = mapFunction(ADC, 0, 1023, 0, 255);
     Serial.println(ad_value);
 
+    // while aó para retardar o envio
+    // provisório - trocar por uma contagem de tempo com overflow
+    int cont = 0;
+    while(cont != 30000) {
+      cont++;
+    } 
+
+    // AMARELO - SOBE
     if (PINB&(1<<PINB2)) {
-      Serial.println("amarelo sobe");
+      Serial.println("as");
     }
 
+    // AMARELO - DESCE
     if (PINB&(1<<PINB3)) {
-      Serial.println("amarelo desce");
+      Serial.println("ad");
     }
 
+    // VERMELHO - SOBE
     if (PINB&(1<<PINB4)) {
-      Serial.println("vermelho sobe");
+      Serial.println("vs");
     }
 
+    // VERMELHO - DESCE
     if (PINB&(1<<PINB5)) {
-      Serial.println("vermelho desce");
+      Serial.println("vd");
     }
   }
 }
