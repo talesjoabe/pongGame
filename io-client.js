@@ -2,7 +2,7 @@ var socket;
 
 p1y = 0;
 p2y = 0;
-vel = 1;
+vel = 0.1;
 
 score1 = 0;
 score2 = 0;
@@ -10,8 +10,8 @@ score2 = 0;
 px_b = 75;
 py_b = 32;
 
-var bx_speed = -5;
-var by_speed = -5;
+var bx_speed = -6;
+var by_speed = -6;
 
 function setup() {
   createCanvas(1200, 850);
@@ -41,8 +41,8 @@ function newDrawing(data) {
     // vermelho - desce
     p2y = p2y + vel;
   } else {
-    // bx_speed = data / 5;
-    // by_speed = data / 5;
+    // velocidade dos jogadores
+    vel = data / 70;
   }
 }
 
@@ -72,14 +72,14 @@ function movePlayers() {
   if (p1y >= 0 && p1y <= 800 - 150) {
     if (keyIsDown(UP_ARROW)) p1y = p1y - vel;
     else if (keyIsDown(DOWN_ARROW)) p1y = p1y + vel;
-  } else if (p1y < 0) p1y = 650;
-  else p1y = 50;
+  } else if (p1y < 0) p1y = 0;
+  else p1y = 650;
 
   if (p2y >= 0 && p2y <= 800 - 150) {
     if (keyIsDown(87)) p2y = p2y - vel;
     else if (keyIsDown(83)) p2y = p2y + vel;
-  } else if (p2y < 0) p2y = 650;
-  else p2y = 50;
+  } else if (p2y < 0) p2y = 0;
+  else p2y = 650;
 }
 
 function Score() {
