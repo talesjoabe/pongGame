@@ -11,6 +11,53 @@ PB5 - Vermelho - Desce                Pino 13
 #include <avr/interrupt.h>
 #include <inttypes.h>
 
+bool change = true;
+
+
+#define F_CPU 16000000UL /*define a frequência do microcontrolador 16MHz (necessário
+ para usar as rotinas de atraso)*/
+#define BAUD   9600    //taxa de 9600 bps
+#define MYUBRR  F_CPU/16/BAUD-1
+unsigned char *chptr;
+
+void USART_Inic(unsigned int ubrr)
+{
+  UBRR0H = (unsigned char)(ubrr >> 8); //Ajusta a taxa de transmissão
+  UBRR0L = (unsigned char)ubrr;
+
+  UCSR0A = 0;//desabilitar velocidade dupla (no Arduino é habilitado por padrão)
+  UCSR0B = _BV(RXEN0) | _BV(TXEN0); //Habilita tanto o transmissor quanto o receptor
+  UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /*modo assíncrono, 8 bits de dados, 1 bit de parada, sem paridade*/
+}
+
+void USART_Transmit(unsigned char info)
+{
+  while(!(UCSR0A & (1<<UDRE0))); // espera a limpeza do registrador de transmissão
+  UDR0 = info; // envia o dado
+}
+
+void escreverMensagem(char *c) {  
+  for (; *c != 0; c++) USART_Transmit(*c);
+}
+
+uint8_t rxByte()
+{
+  //Bit RXC sinaliza quando existem bytes não lidos no buffer
+  while(!(UCSR0A & (1<<RXC0)));
+  return UDR0;
+}
+/*
+ * Limpa o registrador de entrada - quando ocorre um erro, por exemplo - 
+ */
+void USART_Flush( void )
+{
+ unsigned char dummy;
+ while ( UCSR0A & (1<<RXC0) ) dummy = UDR0;
+}
+
+
+
+
 // configuração do ADC
 void set_ADC(void)
 {
@@ -31,6 +78,7 @@ int main()
 {
   Serial.begin(9600);
   uint8_t ad_value;
+//  USART_Inic(MYUBRR);
 
   DDRB &= 0b11000011; // entrada (PB5, PB4, PB3 e PB2)
   PORTB |= 0b00111100; // pull up (PB5, PB4, PB3 e PB2)
@@ -39,34 +87,42 @@ int main()
     set_ADC();
     while (!(ADCSRA & 0b00010000)) // aguarda conversao
       ;
-    ad_value = mapFunction(ADC, 0, 1023, 0, 255);
-    Serial.println(ad_value);
 
-    // while aó para retardar o envio
-    // provisório - trocar por uma contagem de tempo com overflow
-    int cont = 0;
-    while(cont != 30000) {
-      cont++;
-    } 
-
-    // AMARELO - SOBE
-    if (PINB&(1<<PINB2)) {
-      Serial.println("as");
+    if (change) {
+      ad_value = mapFunction(ADC, 0, 1023, 0, 255);
+       Serial.println(ad_value);
+      // escreverMensagem((char*)ad_value);
+      // while só para retardar o envio
+      // provisório - trocar por uma contagem de tempo com overflow
+      int cont = 0;
+      while(cont != 30000) {
+        cont++;
+      } 
+    } else {
+      // AMARELO - SOBE
+      if (PINB&(1<<PINB2)) {
+        Serial.println("as");
+//          escreverMensagem((char*)"as\n\0!");
+      }
+  
+      // AMARELO - DESCE
+      if (PINB&(1<<PINB3)) {
+        Serial.println("ad");
+//          escreverMensagem((char*)"ad\n\0!");
+      }
+  
+      // VERMELHO - SOBE
+      if (PINB&(1<<PINB4)) {
+        Serial.println("vs");
+//          escreverMensagem((char*)"vs\n\0!");
+      }
+  
+      // VERMELHO - DESCE
+      if (PINB&(1<<PINB5)) {
+        Serial.println("vd");
+//          escreverMensagem((char*)"vd\n\0!");
+      }
     }
-
-    // AMARELO - DESCE
-    if (PINB&(1<<PINB3)) {
-      Serial.println("ad");
-    }
-
-    // VERMELHO - SOBE
-    if (PINB&(1<<PINB4)) {
-      Serial.println("vs");
-    }
-
-    // VERMELHO - DESCE
-    if (PINB&(1<<PINB5)) {
-      Serial.println("vd");
-    }
+    change = !change;
   }
 }

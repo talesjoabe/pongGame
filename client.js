@@ -2,7 +2,7 @@ var socket;
 
 p1y = 0;
 p2y = 0;
-vel = 0.1;
+vel = 4;
 
 score1 = 0;
 score2 = 0;
