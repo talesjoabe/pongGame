@@ -41,50 +41,52 @@ function newDrawing(data) {
     // vermelho - desce
     p2y = p2y + vel;
   } else {
-    var direction;
-    bx_speed < 0 ? (direction = -1) : (direction = 1);
+    var directionx;
+    var directiony;
+    bx_speed < 0 ? (directionx = -1) : (directionx = 1);
+    by_speed < 0 ? (directiony = -1) : (directiony = 1);
     vel = data / 25;
     var s = data / 25;
 
     if (bx_speed != 2 && bx_speed != -2 && s > 0 && s < 1) {
-      bx_speed = 2 * direction;
-      by_speed = 2 * direction;
+      bx_speed = 2 * directionx;
+      by_speed = 2 * directiony;
       level = 1;
     } else if (bx_speed != 4 && bx_speed != -4 && s > 1 && s < 2) {
-      bx_speed = 4 * direction;
-      by_speed = 4 * direction;
+      bx_speed = 4 * directionx;
+      by_speed = 4 * directiony;
       level = 2;
     } else if (bx_speed != 6 && bx_speed != -6 && s > 2 && s < 3) {
-      bx_speed = 6 * direction;
-      by_speed = 6 * direction;
+      bx_speed = 6 * directionx;
+      by_speed = 6 * directiony;
       level = 3;
     } else if (bx_speed != 8 && bx_speed != -8 && s > 3 && s < 4) {
-      bx_speed = 8 * direction;
-      by_speed = 8 * direction;
+      bx_speed = 8 * directionx;
+      by_speed = 8 * directiony;
       level = 4;
     } else if (bx_speed != 10 && bx_speed != -10 && s > 4 && s < 5) {
-      bx_speed = 10 * direction;
-      by_speed = 10 * direction;
+      bx_speed = 10 * directionx;
+      by_speed = 10 * directiony;
       level = 5;
     } else if (bx_speed != 12 && bx_speed != -12 && s > 5 && s < 6) {
-      bx_speed = 12 * direction;
-      by_speed = 12 * direction;
+      bx_speed = 12 * directionx;
+      by_speed = 12 * directiony;
       level = 6;
     } else if (bx_speed != 14 && bx_speed != -14 && s > 6 && s < 7) {
-      bx_speed = 14 * direction;
-      by_speed = 14 * direction;
+      bx_speed = 14 * directionx;
+      by_speed = 14 * directiony;
       level = 7;
     } else if (bx_speed != 16 && bx_speed != -16 && s > 7 && s < 8) {
-      bx_speed = 16 * direction;
-      by_speed = 16 * direction;
+      bx_speed = 16 * directionx;
+      by_speed = 16 * directiony;
       level = 8;
     } else if (bx_speed != 18 && bx_speed != -18 && s > 8 && s < 9) {
-      bx_speed = 18 * direction;
-      by_speed = 18 * direction;
+      bx_speed = 18 * directionx;
+      by_speed = 18 * directiony;
       level = 9;
     } else if (bx_speed != 20 && bx_speed != -20 && s > 9 && s < 10) {
-      bx_speed = 20 * direction;
-      by_speed = 20 * direction;
+      bx_speed = 20 * directionx;
+      by_speed = 20 * directiony;
       level = 10;
     }
     // console.log(s);
@@ -93,9 +95,6 @@ function newDrawing(data) {
 
 function draw() {
   background(bg);
-
-  // fill(0);
-  // rect(1200, 0, 200, 150);
 
   fill(0);
   rect(-1, 800, 1250, 900);
