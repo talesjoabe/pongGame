@@ -22,11 +22,20 @@ io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
   console.log('new connection: ' + socket.id);
-  // socket.on('recv', fnc);
+  socket.on('ponto2', score2);
+  socket.on('ponto1', score1);
 
   parser.on('data', printInfo);
   function printInfo(data) {
     io.sockets.emit('recv', data);
     console.log(data);
+  }
+
+  function score2(data) {
+    console.log('score2: ' + data);
+  }
+
+  function score1(data) {
+    console.log('score1: ' + data);
   }
 }

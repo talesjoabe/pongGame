@@ -10,6 +10,7 @@ PB5 - Vermelho - Desce                Pino 13
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <inttypes.h>
+#include <util/delay.h> //bibliot. para as rotinas de _delay_ms() e delay_us()
 
 bool change = true;
 
@@ -57,12 +58,16 @@ void USART_Flush( void )
 
 
 
-
 // configuração do ADC
-void set_ADC(void)
+void set_ADC(int mux)
 {
   // Registrador de Seleção
-  ADMUX |= 0b01000000; // 01 ref(Vcc); 0 (ADC - SEM ADLAR); 0 (RESERVADO); 0000 (MUX p/ ADC0)
+  ADMUX &= 11110000;
+  switch(mux) {
+    case 0:
+      ADMUX |= 0b01000000; // 01 ref(Vcc); 0 (ADC - SEM ADLAR); 0 (RESERVADO); 0000 (MUX p/ ADC0)
+      break;
+  }
   // Registrador de Status
   ADCSRA |= 0b11000111; // 1 (ADEN: Enable); 10 (ADSC: Start Conversion e ADATE: sem auto trigger); 00 (ADIF: Flag de interrupção e ADIE: Interrupt Enable); 111 (Prescaler - Divisão por 128)
   // Habilita uso de interrupção
@@ -76,22 +81,22 @@ long mapFunction(long adc, long in_min, long in_max, long out_min, int out_max)
 
 int main()
 {
-  Serial.begin(9600);
+//  Serial.begin(9600);
   uint8_t ad_value;
-//  USART_Inic(MYUBRR);
+  USART_Inic(MYUBRR);
 
   DDRB &= 0b11000011; // entrada (PB5, PB4, PB3 e PB2)
   PORTB |= 0b00111100; // pull up (PB5, PB4, PB3 e PB2)
 
   while (true) {
-    set_ADC();
+    set_ADC(0);
     while (!(ADCSRA & 0b00010000)) // aguarda conversao
       ;
 
     if (change) {
       ad_value = mapFunction(ADC, 0, 1023, 0, 255);
-       Serial.println(ad_value);
-      // escreverMensagem((char*)ad_value);
+//       Serial.println(ad_value);
+       escreverMensagem((char*)ad_value);
       // while só para retardar o envio
       // provisório - trocar por uma contagem de tempo com overflow
       int cont = 0;
@@ -101,26 +106,26 @@ int main()
     } else {
       // AMARELO - SOBE
       if (PINB&(1<<PINB2)) {
-        Serial.println("as");
-//          escreverMensagem((char*)"as\n\0!");
+//        Serial.println("as");
+          escreverMensagem((char*)"as\n\0!");
       }
   
       // AMARELO - DESCE
       if (PINB&(1<<PINB3)) {
-        Serial.println("ad");
-//          escreverMensagem((char*)"ad\n\0!");
+//        Serial.println("ad");
+          escreverMensagem((char*)"ad\n\0!");
       }
   
       // VERMELHO - SOBE
       if (PINB&(1<<PINB4)) {
-        Serial.println("vs");
-//          escreverMensagem((char*)"vs\n\0!");
+//        Serial.println("vs");
+          escreverMensagem((char*)"vs\n\0!");
       }
   
       // VERMELHO - DESCE
       if (PINB&(1<<PINB5)) {
-        Serial.println("vd");
-//          escreverMensagem((char*)"vd\n\0!");
+//        Serial.println("vd");
+          escreverMensagem((char*)"vd\n\0!");
       }
     }
     change = !change;
