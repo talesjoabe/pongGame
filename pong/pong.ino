@@ -95,37 +95,32 @@ int main()
 
     if (change) {
       ad_value = mapFunction(ADC, 0, 1023, 0, 255);
-//       Serial.println(ad_value);
-       escreverMensagem((char*)ad_value);
-      // while só para retardar o envio
-      // provisório - trocar por uma contagem de tempo com overflow
-      int cont = 0;
-      while(cont != 30000) {
-        cont++;
-      } 
+//      Serial.println(ad_value);
+      escreverMensagem((char*)ad_value);
+
     } else {
       // AMARELO - SOBE
       if (PINB&(1<<PINB2)) {
 //        Serial.println("as");
-          escreverMensagem((char*)"as\n\0!");
+        escreverMensagem((char*)"as\n\0!");
       }
   
       // AMARELO - DESCE
       if (PINB&(1<<PINB3)) {
 //        Serial.println("ad");
-          escreverMensagem((char*)"ad\n\0!");
+        escreverMensagem((char*)"ad\n\0!");
       }
   
       // VERMELHO - SOBE
       if (PINB&(1<<PINB4)) {
 //        Serial.println("vs");
-          escreverMensagem((char*)"vs\n\0!");
+        escreverMensagem((char*)"vs\n\0!");
       }
   
       // VERMELHO - DESCE
       if (PINB&(1<<PINB5)) {
 //        Serial.println("vd");
-          escreverMensagem((char*)"vd\n\0!");
+        escreverMensagem((char*)"vd\n\0!");
       }
     }
     change = !change;
