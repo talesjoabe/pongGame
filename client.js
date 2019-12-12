@@ -14,36 +14,14 @@ var bx_speed = -6;
 var by_speed = -6;
 var level = 3;
 
+//Variaveis para contagem do tempo
 let segundos = 0;
 let minutos = 0;
+
+//Variaveis booleanas para estagios do jogo
 var start = false;
 var win = false;
 
-function tela_win() {
-  fill(255, 255, 255);
-  text('RESTART', 350, height / 2 + 200);
-  text('EXIT', 650, height / 2 + 200);
-  if (mouseIsPressed) {
-    if (
-      mouseX >= 350 &&
-      mouseX <= 350 + 220 &&
-      mouseY >= height / 2 + 160 && mouseY <= height / 2 + 200
-    ) {
-      win = false;
-      score1 = 0;
-      score2 = 0;
-      minutos = 0;
-      segundos = 0;
-    }
-    if (
-      mouseX >= 650 &&
-      mouseX <= 650 + 110 &&
-      mouseY >= height / 2 + 160 && mouseY <= height / 2 + 200
-    ) {
-      remove();
-    }
-  }
-}
 
 function setup() {
   createCanvas(1200, 940);
@@ -124,49 +102,33 @@ function newDrawing(data) {
   }
 }
 
-function counting_time() {
-  if (frameCount % 60 == 0) {
-    if (segundos < 60) {
-      segundos++;
-    }
-    if (segundos == 60) {
-      segundos = 0;
-      minutos++;
-    }
-  }
-}
-
 function draw() {
   background(bg);
-  if (start == false) {
+  if(start == false){
     textSize(100);
     fill(255, 255, 255);
-    text('START', 450, height / 2);
+    text("START",450, height/2);
     if (mouseIsPressed) {
-      if (
-        mouseX >= 450 &&
-        mouseX <= 450 + 300 &&
-        mouseY >= height / 2 - 60 && mouseY <= height / 2
-      ) {
-        start = true;
+      if ((mouseX>=(450) && mouseX<=(450+300)) && (mouseY>=(height/2-60) && mouseY<=height/2)) {
+        start=true;
       }
     }
-  } else {
-    if (score1 == 21) {
+  }else{
+    if(score1 == 21){
       win = true;
       fill(255, 255, 255);
-      textSize(50);
-      text('JOGADOR 1 GANHOU!!!', 325, height / 2);
+      textSize(50)
+      text("JOGADOR 1 GANHOU!!!",325, height/2);
       tela_win();
     }
-    if (score2 == 21) {
+    if(score2 == 21){
       win = true;
       fill(255, 255, 255);
-      textSize(50);
-      text('JOGADOR 2 GANHOU!!!', 325, height / 2);
+      textSize(50)
+      text("JOGADOR 2 GANHOU!!!",325, height/2);
       tela_win();
     }
-    if (win == false) {
+    if(win == false){
       fill(0);
       rect(-1, 800, 1250, 900);
 
@@ -183,7 +145,7 @@ function draw() {
       moveBall();
       movePlayers();
       bounce();
-    }
+      }
   }
 }
 
@@ -211,8 +173,43 @@ function Score() {
   text('DIFICULDADE: ' + level, 500, 870);
   counting_time();
   fill(255, 255, 255);
-  text('TEMPO ' + minutos + ':' + segundos, 500, 900);
+  text('TEMPO '+minutos+':'+segundos, 500, 900);
 }
+
+//Tela de vencedor
+function tela_win(){
+  fill(255, 255, 255);
+  text("RESTART",350, height/2+200);
+  text("EXIT",650, height/2+200);
+  if (mouseIsPressed) {
+    //Restart do Jogo
+    if ((mouseX>=(350) && mouseX<=(350+220)) && (mouseY>=(height/2+160) && mouseY<=height/2+200)) {
+      win=false;
+      score1 = 0;
+      score2 = 0;
+      minutos = 0;
+      segundos = 0;
+    }
+    //Exit do jogo
+    if ((mouseX>=(650) && mouseX<=(650+110)) && (mouseY>=(height/2+160) && mouseY<=height/2+200)) {
+      remove();
+    }
+  }
+}
+
+//Funcao para contagem do tempo de jogo
+function counting_time(){
+	if(frameCount % 60 == 0){ 
+	    if(segundos < 60){
+		      segundos++	    
+	    }
+	    if(segundos == 60){
+          segundos = 0;
+		      minutos++;
+	    }
+	}
+}
+
 
 function moveBall() {
   px_b += bx_speed;
