@@ -22,7 +22,6 @@ let minutos = 0;
 var start = false;
 var win = false;
 
-
 function setup() {
   createCanvas(1200, 940);
   bg = loadImage(
